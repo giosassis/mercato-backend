@@ -1,7 +1,7 @@
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from core.services.sale_item_service import SaleItemService
-from core.serializers.sale_item_serializer import SaleItemSerializer
+from core.domain.serializers.sale_item_serializer import SaleItemSerializer
 
 
 class SaleItemViewSet(viewsets.ViewSet):
