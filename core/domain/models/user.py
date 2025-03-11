@@ -13,7 +13,7 @@ class User(AbstractUser):
     ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    register_number = models.CharField(max_length=10, unique=True)
+    register_number = models.CharField(max_length=10, unique=True,null=True)
     employee = models.OneToOneField(Employee, on_delete=models.CASCADE, null=True, blank=False)
     role = models.CharField(max_length=10, choices=CHOICE_ROLES, default=CASHIER)
 
