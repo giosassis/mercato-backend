@@ -1,0 +1,112 @@
+import uuid
+from django.db import models
+from core.domain.models.employee import Employee
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    CASHIER = "cashier"
+    MANAGER = "manager"
+    
+    CHOICE_ROLES = [
+        (CASHIER, "Cashier"),
+        (MANAGER, "Manager"),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    register_number = models.CharField(max_length=10, unique=True)
+    employee = models.OneToOneField(Employee, on_delete=models.CASCADE, null=False, blank=False)
+    role = models.CharField(max_length=10, choices=CHOICE_ROLES, default=CASHIER)
+
+    def __str__(self):
+        return f"{self.username} - {self.role}"
+
+
+import uuid
+from django.db import models
+from core.domain.models.user import User
+
+class Sale(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    cashier = models.ForeignKey(User, on_delete=models.CASCADE)  
+    date = models.DateTimeField(auto_now_add=True) 
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  
+
+    def __str__(self):
+        return f"Sale #{self.id} - {self.cashier.username} - {self.date}"
+
+import uuid
+from django.db import models
+from core.domain.models.sale import Sale
+from core.domain.models.product import Product
+
+class SaleItem(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sale = models.ForeignKey(Sale, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.quantity}x {self.product.name} - R$ {self.subtotal}"
+
+from django.db import models
+import uuid
+
+class Product(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=100)
+    barcode = models.CharField(max_length=20, unique=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.name} - {self.barcode}"
+from django.db import models
+import uuid
+
+class Product(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=100)
+    barcode = models.CharField(max_length=20, unique=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.name} - {self.barcode}"
+import uuid
+from django.db import models
+from core.domain.models.sale import Sale
+
+class Payment(models.Model):
+    CASH = "cash"
+    CREDIT_CARD = "credit_card"
+    DEBIT_CARD = "debit_card"
+    PIX = "pix"
+
+    CHOICE_PAYMENT_METHODS = [
+        (CASH, "Cash"),
+        (CREDIT_CARD, "Credit Card"),
+        (DEBIT_CARD, "Debit Card"),
+        (PIX, "Pix"),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sale = models.ForeignKey(Sale, on_delete=models.CASCADE, related_name="payments")
+    payment_method = models.CharField(max_length=15, choices=CHOICE_PAYMENT_METHODS)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"Payment #{self.id} - {self.payment_method} - R$ {self.amount}"
+from django.db import models
+import uuid
+
+class Employee(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=100)
+    birth_date = models.DateField()
+    address = models.TextField()
+    phone = models.CharField(max_length=20)
+    email = models.EmailField()
+
+    def __str__(self):
+        return f"{self.name} - {self.phone}"

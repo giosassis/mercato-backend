@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:latest
+    container_name: mercato_mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    restart: always
+    networks:
+      - mercato_network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: mercato_phpmyadmin
+    environment:
+      PMA_HOST: mercato_mysql_db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 0
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - mercato_network
+
+networks:
+  mercato_network:
+    driver: bridge
