@@ -3,8 +3,11 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
 from core.services.product_service import ProductService
 from core.domain.serializers.product_serializer import ProductSerializer
+from core.permissions import IsManager
+from rest_framework.permissions import IsAuthenticated
 
 class ProductViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+    permission_classes = [IsAuthenticated, IsManager]
     queryset = ProductService.get_all_products()
     serializer_class = ProductSerializer
 

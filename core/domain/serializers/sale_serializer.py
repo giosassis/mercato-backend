@@ -10,7 +10,7 @@ class SaleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sale
-        fields = ["id", "cashier", "date", "total", "items", "payments"]
+        fields = ["id", "cashier", "date", "total", "items", "payments", "status"]
 
     def create(self, validated_data):
         items_data = validated_data.pop("items")

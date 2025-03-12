@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from core.domain.models import User
-from core.domain.serializers import EmployeeSerializer
+from core.domain.serializers.employee_serializer import EmployeeSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     employee = EmployeeSerializer(read_only=True)  

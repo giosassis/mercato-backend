@@ -5,6 +5,8 @@ from core.api.views.sale_item_view import SaleItemViewSet
 from core.api.views.product_view import ProductViewSet
 from core.api.views.category_view import CategoryViewSet
 from core.api.views.payment_view import PaymentViewSet
+from core.api.views.auth_view import LoginView, LogoutView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 router = DefaultRouter()
 router.register(r"products", ProductViewSet, basename="product")
@@ -33,4 +35,7 @@ urlpatterns = [
         PaymentViewSet.as_view({"get": "list", "post": "create"}),
         name="payments",
     ),
+    path("login/", LoginView.as_view(), name="login"),
+    path("logout/", LogoutView.as_view(), name="logout"),
+    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
