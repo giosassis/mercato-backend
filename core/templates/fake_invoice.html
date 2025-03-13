@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DANFE - Documento Auxiliar da Nota Fiscal Eletrônica</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        background: #f8f8f8;
+        padding: 20px;
+      }
+      .container {
+        max-width: 900px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1,
+      h3 {
+        text-align: center;
+        margin-bottom: 5px;
+      }
+      p {
+        text-align: center;
+        font-size: 12px;
+        margin-bottom: 15px;
+      }
+      .info-table,
+      .products-table,
+      .total-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      .info-table td,
+      .products-table td,
+      .products-table th,
+      .total-table td {
+        padding: 8px;
+        border: 1px solid #ddd;
+      }
+      .products-table th {
+        background: #f0f0f0;
+        text-align: left;
+      }
+      .right {
+        text-align: right;
+      }
+      .footer {
+        text-align: center;
+        font-size: 12px;
+        color: #666;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>DANFE</h1>
+      <p>Documento Auxiliar da Nota Fiscal Eletrônica</p>
+      <p><strong>Chave de Acesso:</strong> {{ invoice.access_key }}</p>
+      <p><strong>Protocolo de Autorização: </strong> {{ invoice.protocol }}</p>
+      <p><strong>Número NF-e:</strong> {{ invoice.invoice_number }}</p>
+
+      <table class="info-table">
+        <tr>
+          <td>
+            <strong>Dados do Emitente</strong><br />
+            <strong>Razão Social:</strong> Mercato Software e Mercados LTDA<br />
+            <strong>CNPJ:</strong> {{ invoice.company_cnpj }}<br />
+            <strong>Inscrição Estadual:</strong> 987654321<br />
+            <strong>Endereço:</strong> Rua Líbero Badaró, Taquara, Rio de
+            Janeiro - CEP: 22713-110<br />
+            <strong>Telefone:</strong> (21) 12345-6789<br />
+            <strong>Email:</strong> contato@mercato.com.br
+          </td>
+        </tr>
+      </table>
+
+      <table class="info-table">
+        <tr>
+          <td><strong>Data de Emissão:</strong> {{ invoice.issue_date }}</td>
+        </tr>
+      </table>
+
+      <h3>Produtos / Serviços</h3>
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Qtd</th>
+            <th>Valor Unitário</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in sale.items.all %}
+          <tr>
+            <td>{{ item.product.name }}</td>
+            <td class="right">{{ item.quantity }}</td>
+            <td class="right">R$ {{ item.product.price }}</td>
+            <td class="right">R$ {{ item.subtotal }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>Total</h3>
+      <table class="total-table">
+        <tr>
+          <td><strong>Valor Total:</strong> R$ {{ sale.total }}</td>
+        </tr>
+      </table>
+
+      <p class="footer">
+        Obrigado por comprar no Mercato! Esta nota não possui validade fiscal e
+        foi criada para fins de estudo.
+      </p>
+    </div>
+  </body>
+</html>

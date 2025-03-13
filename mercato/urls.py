@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from core.api.views.sale_view import SaleViewSet
+from core.api.views.fake_invoice_view import FakeInvoiceViewSet
 from core.api.views.sale_item_view import SaleItemViewSet
 from core.api.views.product_view import ProductViewSet
 from core.api.views.category_view import CategoryViewSet
@@ -9,11 +10,13 @@ from core.api.views.auth_view import LoginView, LogoutView
 from rest_framework_simplejwt.views import TokenRefreshView
 from core.api.views.user_view import UserViewSet
 
+
 router = DefaultRouter()
 router.register(r"products", ProductViewSet, basename="product")
 router.register(r"categories", CategoryViewSet, basename="category")
 router.register(r"sales", SaleViewSet, basename="sale")
-router.register(r'users', UserViewSet, basename='user')
+router.register(r"users", UserViewSet, basename='user')
+router.register(r"invoices", FakeInvoiceViewSet, basename='invoice')
 
 urlpatterns = [
     path("", include(router.urls)),
