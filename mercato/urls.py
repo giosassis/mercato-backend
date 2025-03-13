@@ -7,11 +7,13 @@ from core.api.views.category_view import CategoryViewSet
 from core.api.views.payment_view import PaymentViewSet
 from core.api.views.auth_view import LoginView, LogoutView
 from rest_framework_simplejwt.views import TokenRefreshView
+from core.api.views.user_view import UserViewSet
 
 router = DefaultRouter()
 router.register(r"products", ProductViewSet, basename="product")
 router.register(r"categories", CategoryViewSet, basename="category")
 router.register(r"sales", SaleViewSet, basename="sale")
+router.register(r'users', UserViewSet, basename='user')
 
 urlpatterns = [
     path("", include(router.urls)),

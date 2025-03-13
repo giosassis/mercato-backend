@@ -3,8 +3,11 @@ from rest_framework.response import Response
 from core.services.sale_service import SaleService
 from core.domain.serializers.sale_serializer import SaleSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 
 class SaleViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = SaleSerializer
 

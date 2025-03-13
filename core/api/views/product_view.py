@@ -5,8 +5,17 @@ from core.services.product_service import ProductService
 from core.domain.serializers.product_serializer import ProductSerializer
 from core.permissions import IsManager
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
-class ProductViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+
+class ProductViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated, IsManager]
     queryset = ProductService.get_all_products()
     serializer_class = ProductSerializer
@@ -16,7 +25,7 @@ class ProductViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Crea
             return ProductService.get_product_by_id(pk)
         except ValueError:
             raise NotFound("Product not found")
-        
+
     def list_by_category(self, request, category_id=None):
         try:
             products = ProductService.get_products_by_category(category_id)
@@ -39,7 +48,9 @@ class ProductViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Crea
         except ValueError as e:
             raise ValidationError(str(e))
 
-        return Response(self.get_serializer(product).data, status=status.HTTP_201_CREATED)
+        return Response(
+            self.get_serializer(product).data, status=status.HTTP_201_CREATED
+        )
 
     def update(self, request, pk=None):
         product = self.get_object(pk)
@@ -47,4 +58,6 @@ class ProductViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Crea
         serializer.is_valid(raise_exception=True)
 
         updated_product = ProductService.update_product(pk, serializer.validated_data)
-        return Response(self.get_serializer(updated_product).data, status=status.HTTP_200_OK)
+        return Response(
+            self.get_serializer(updated_product).data, status=status.HTTP_200_OK
+        )
