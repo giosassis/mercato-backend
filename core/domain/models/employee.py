@@ -4,7 +4,7 @@ import uuid
 
 class Employee(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=False, blank=False)
     birth_date = models.DateField()
     address = models.TextField()
     phone = models.CharField(max_length=20)
