@@ -4,18 +4,24 @@ from core.services.sale_service import SaleService
 from core.domain.serializers.sale_serializer import SaleSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.decorators import action
 
 
 class SaleViewSet(viewsets.ViewSet):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
     serializer_class = SaleSerializer
 
     def list(self, request):
         sales = SaleService.get_all_sales()
         serializer = self.serializer_class(sales, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
+    
+    @action(detail=False, methods=['get'])
+    def total_per_day(self, request):
+        sales_data = SaleService.get_sales_total_per_day()
+        return Response(sales_data, status=status.HTTP_200_OK)
+    
     def create(self, request):
         try:
             serializer = SaleSerializer(data=request.data)
