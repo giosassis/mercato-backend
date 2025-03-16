@@ -15,11 +15,20 @@ class ProductViewSet(
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
 ):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsManager]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated, IsManager]
     queryset = ProductService.get_all_products()
     serializer_class = ProductSerializer
-
+    def list(self, request):
+        query = request.GET.get("search", None)  # Obtém o parâmetro de busca
+        if query:
+            products = ProductService.search_products(query)
+        else:
+            products = ProductService.get_all_products()
+        
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
     def get_object(self, pk):
         try:
             return ProductService.get_product_by_id(pk)

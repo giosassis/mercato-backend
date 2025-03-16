@@ -31,4 +31,8 @@ class PaymentService:
             }
         )
 
+        if new_total >= sale.total:
+            sale.status = Sale.COMPLETED 
+            sale.save()
+
         return payment

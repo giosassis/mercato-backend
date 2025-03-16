@@ -1,8 +1,7 @@
 from core.repositories.sale_repository import SaleRepository
 from core.repositories.sale_item_repository import SaleItemRepository
 from core.repositories.product_repository import ProductRepository
-from core.domain.models import SaleItem
-
+from core.domain.models import SaleItem, Sale
 
 class SaleService:
 
@@ -18,6 +17,9 @@ class SaleService:
     def get_sales_by_cashier(cashier):
         return SaleRepository.get_by_cashier(cashier)
 
+    def get_sales_total_per_day():
+        return SaleRepository.get_sales_total_per_day()
+    
     def create_sale(data):
         items_data = data.pop("items")
         sale = SaleRepository.create_sale(data)

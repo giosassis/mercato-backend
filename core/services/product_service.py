@@ -20,7 +20,11 @@ class ProductService:
         if not product:
             raise ValueError("Product not found")
         return product
-
+    
+    @staticmethod
+    def search_products(query):
+        return ProductRepository.search_products(query)
+    
     @staticmethod
     def create_product(data):
         if ProductRepository.get_by_barcode(data["barcode"]):
