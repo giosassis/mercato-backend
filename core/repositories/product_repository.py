@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from core.domain.models import Product
+from django.db.models import Q
 
 class ProductRepository:
     
@@ -19,6 +20,12 @@ class ProductRepository:
     def get_by_barcode(barcode):
         return Product.objects.filter(barcode=barcode).first()
 
+    @staticmethod
+    def search_products(query):
+        return Product.objects.filter(
+            Q(name__icontains=query) |
+            Q(barcode=query)
+        ) if query else Product.objects.all()
     @staticmethod
     def create_product(data):
         return Product.objects.create(**data)

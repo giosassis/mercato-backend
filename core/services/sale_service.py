@@ -1,8 +1,7 @@
 from core.repositories.sale_repository import SaleRepository
 from core.repositories.sale_item_repository import SaleItemRepository
 from core.repositories.product_repository import ProductRepository
-from core.domain.models import SaleItem
-
+from core.domain.models import SaleItem, Sale
 
 class SaleService:
 
